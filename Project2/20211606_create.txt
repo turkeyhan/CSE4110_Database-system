@@ -1,0 +1,88 @@
+create table customer_information(customer_id int not null, customer_account varchar(20) not null, gender varchar(10) not null, customer_name varchar(30) not null, address varchar(50) not null,  payment varchar(30) not null, primary key (customer_id));
+insert into customer_information values (100000001,"11111111111111", "male", "peter", "suwon-station", "Credit Card");
+insert into customer_information values (100000002,"11111111111112", "male", "john", "sinchon-station", "Account Transfer");
+insert into customer_information values (100000003,"11111111111113", "female", "park", "seoul-station", "Credit Card");
+insert into customer_information values (100000004,"11111111111114", "male", "kim", "anyang-station", "Credit Card");
+insert into customer_information values (100000005,"11111111111115", "female", "choi", "hongdae-station", "Credit Card");
+insert into customer_information values (100000006,"11111111111116", "female", "seok", "gangbuk-station", "Cell Phone");
+
+create table customer_phone(customer_phone_number varchar(20) not null, customer_id int not null, primary key(customer_phone_number), foreign key(customer_id) references customer_information(customer_id) on update cascade);
+insert into customer_phone values ("111-1111-1111", 100000001);
+insert into customer_phone values ("111-1111-1112", 100000002);
+insert into customer_phone values ("111-1111-1113", 100000003);
+insert into customer_phone values ("111-1111-1114", 100000004);
+insert into customer_phone values ("111-1111-1115", 100000005);
+insert into customer_phone values ("111-1111-1116", 100000006);
+
+create table customer_email(email_address varchar(20) not null, customer_id int not null , primary key(email_address), foreign key(customer_id) references customer_information(customer_id) on update cascade);
+insert into customer_email values ("a@naver.com", 100000001);
+insert into customer_email values ("b@naver.com", 100000002);
+insert into customer_email values ("c@naver.com", 100000003);
+insert into customer_email values ("d@naver.com", 100000004);
+insert into customer_email values ("e@naver.com", 100000005);
+insert into customer_email values ("f@naver.com", 100000006);
+
+create table package(package_id int not null, customer_id int not null, wrapped_type varchar(15) not null, weight float not null, contents_type varchar(15) not null, destination varchar(30) not null, purchased_date date not null, primary key(customer_id, package_id), foreign key(customer_id) references customer_information(customer_id) on update cascade);
+insert into package values (200000001, 100000001, "small", 0.3, "None", "suwon-station", '2023-05-20');
+insert into package values (200000002, 100000002, "big", 2.3, "Danger", "sinchon-station", '2023-05-24');
+insert into package values (200000003, 100000003, "normal", 1.3, "None", "seoul-station", '2023-05-29');
+insert into package values (200000004, 100000004, "small", 0.5, "None", "anyang-station", '2023-05-30');
+insert into package values (200000005, 100000005, "normal", 1.8, "Overseas", "hongdae-station", '2023-06-03');
+insert into package values (200000006, 100000006, "small", 0.6, "Overseas_Danger", "gangbuk-station", '2023-06-05');
+insert into package values (200000007, 100000001, "big", 2.5, "Danger", "suwon-station", '2023-05-06');
+insert into package values (200000008, 100000003, "normal", 1.5, "None", "sinchon-station", '2023-05-20');
+insert into package values (200000009, 100000002, "big", 2.8, "Danger", "daehan-station", '2022-05-20');
+
+
+create table vehicle(vehicle_id int not null, loc_date date not null, location varchar(30) not null, primary key(vehicle_id));
+insert into vehicle values (300000001, '2023-05-22', "anyang-station");
+insert into vehicle values (300000002, '2023-05-25', "incheon-station");
+insert into vehicle values (300000003, '2023-05-29', "goyang-station");
+insert into vehicle values (300000004, '2023-05-31', "gangnam-station");
+insert into vehicle values (300000005, '2023-06-06', "jamsil-station");
+
+create table staff_information(vehicle_id int not null, staff_name varchar(30) not null,  primary key(vehicle_id), foreign key(vehicle_id) references vehicle(vehicle_id) on update cascade);
+insert into staff_information values (300000001, "pet");
+insert into staff_information values (300000002, "jo");
+insert into staff_information values (300000003, "poll");
+insert into staff_information values (300000004, "kiles");
+insert into staff_information values (300000005, "jin");
+
+create table staff_phone(staff_phone_number varchar(20) not null, vehicle_id int not null , primary key(staff_phone_number), foreign key(vehicle_id) references staff_information(vehicle_id) on update cascade);
+insert into staff_phone values ("010-1111-1111", 300000001);
+insert into staff_phone values ("010-1111-1112", 300000002);
+insert into staff_phone values ("010-1111-1113", 300000003);
+insert into staff_phone values ("010-1111-1114", 300000004);
+insert into staff_phone values ("010-1111-1115", 300000005);
+
+create table delivery(delivery_id int not null, package_id int not null, delivery_date date null, vehicle_id int not null, state_code int not null, customer_id int not null, recipient varchar(20) not null, anticipate_date date not null, primary key(delivery_id, package_id), foreign key(customer_id, package_id) references package(customer_id, package_id) on update cascade, foreign key(vehicle_id) references vehicle(vehicle_id) on update cascade);
+insert into delivery values (400000001, 200000001, '2023-05-25' , 300000001, 555, 100000001, "peter", '2023-05-25');
+insert into delivery values (400000002, 200000002, '2023-05-29' , 300000002, 777, 100000002, "john", '2023-05-28');
+insert into delivery values (400000003, 200000003, '2023-06-05' , 300000003, 555, 100000003, "park", '2023-06-01');
+insert into delivery values (400000004, 200000004, '2023-06-02' , 300000004, 555, 100000004, "kim", '2023-06-03');
+insert into delivery values (400000005, 200000005, null , 300000005, 777, 100000005, "choi", '2023-06-20');
+insert into delivery values (400000006, 200000006, null , 300000002, 777, 100000006, "jpark", '2023-06-10');
+insert into delivery values (400000007, 200000007, '2023-05-10' , 300000002, 555, 100000001, "peter", '2023-05-10');
+insert into delivery values (400000008, 200000008, null , 300000002, 777, 100000003, "han", '2023-05-25');
+insert into delivery values (400000009, 200000009, '2022-05-30' , 300000005, 555, 100000002, "min", '2022-05-27');
+
+
+create table statement(statement_id int not null, customer_id int not null, not_paid int not null, paid int not null, billed_date date not null, primary key(statement_id, customer_id), foreign key(customer_id) references customer_information(customer_id) on update cascade);
+insert into statement values (500000001, 100000001, 60000, 110000, '2023-06-10');
+insert into statement values (500000002, 100000002, 0, 150000, '2023-06-10');
+insert into statement values (500000003, 100000003, 110000, 10000, '2023-06-10');
+insert into statement values (500000004, 100000004, 0, 60000, '2023-06-10');
+insert into statement values (500000005, 100000005, 140000, 0, '2023-06-10');
+insert into statement values (500000006, 100000006, 160000, 100000, '2023-06-10');
+insert into statement values (500000007, 100000002, 10000, 100000, '2022-06-10');
+
+create table service(delivery_id int not null, package_id int not null, statement_id int not null, service_fee int not null, customer_id int not null, primary key(delivery_id, package_id), foreign key(statement_id, customer_id) references statement(statement_id, customer_id) on update cascade, foreign key(delivery_id, package_id) references delivery(delivery_id, package_id) on update cascade);
+insert into service values (400000001, 200000001, 500000001, 10000, 100000001);
+insert into service values (400000002, 200000002, 500000002, 100000, 100000002);
+insert into service values (400000003, 200000003, 500000003, 30000, 100000003);
+insert into service values (400000004, 200000004, 500000004, 10000, 100000004);
+insert into service values (400000005, 200000005, 500000005, 130000, 100000005);
+insert into service values (400000006, 200000006, 500000006, 210000, 100000006);
+insert into service values (400000007, 200000007, 500000001, 100000, 100000001);
+insert into service values (400000008, 200000008, 500000003, 30000, 100000001);
+insert into service values (400000009, 200000009, 500000007, 100000, 100000002);

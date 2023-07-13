@@ -1,0 +1,10 @@
+drop table service;
+drop table statement;
+drop table delivery;
+drop table staff_phone;
+drop table staff_information;
+drop table vehicle;
+drop table package;
+drop table customer_email;
+drop table customer_phone;
+drop table customer_information;
